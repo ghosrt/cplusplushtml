@@ -6626,9 +6626,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.18" data-path="../第17章-输入、输出和文件.md">
+        <li class="chapter " data-level="1.18" data-path="../第17章-输入、输出和文件.html">
             
-                <span>
+                <a href="../第17章-输入、输出和文件.html">
             
                     
                     第17章 输入、输出和文件
@@ -7701,7 +7701,222 @@
                             
                                 <section class="normal markdown-section">
                                 
-                                
+                                <pre><code>
+void preOrder2(BinTree *root)     //&#x975E;&#x9012;&#x5F52;&#x524D;&#x5E8F;&#x904D;&#x5386; 
+{
+    stack&lt;BinTree*&gt; s;
+    BinTree *p=root;
+    while(p!=NULL||!s.empty())
+    {
+        while(p!=NULL)
+        {
+            cout&lt;&lt;p-&gt;data&lt;&lt;&quot; &quot;;
+            s.push(p);
+            p=p-&gt;lchild;
+        }
+        if(!s.empty())
+        {
+            p=s.top();
+            s.pop();
+            p=p-&gt;rchild;
+        }
+    }
+}
+
+
+
+void inOrder2(BinTree *root)      //&#x975E;&#x9012;&#x5F52;&#x4E2D;&#x5E8F;&#x904D;&#x5386;
+{
+    stack&lt;BinTree*&gt; s;
+    BinTree *p=root;
+    while(p!=NULL||!s.empty())
+    {
+        while(p!=NULL)
+        {
+            s.push(p);
+            p=p-&gt;lchild;
+        }
+        if(!s.empty())
+        {
+            p=s.top();
+            cout&lt;&lt;p-&gt;data&lt;&lt;&quot; &quot;;
+            s.pop();
+            p=p-&gt;rchild;
+        }
+    }    
+} 
+
+
+
+
+void postOrder2(BinTree *root)    //&#x975E;&#x9012;&#x5F52;&#x540E;&#x5E8F;&#x904D;&#x5386;
+{
+    stack&lt;BTNode*&gt; s;
+    BinTree *p=root;
+    BTNode *temp;
+    while(p!=NULL||!s.empty())
+    {
+        while(p!=NULL)              //&#x6CBF;&#x5DE6;&#x5B50;&#x6811;&#x4E00;&#x76F4;&#x5F80;&#x4E0B;&#x641C;&#x7D22;&#xFF0C;&#x76F4;&#x81F3;&#x51FA;&#x73B0;&#x6CA1;&#x6709;&#x5DE6;&#x5B50;&#x6811;&#x7684;&#x7ED3;&#x70B9; 
+        {
+            BTNode *btn=(BTNode *)malloc(sizeof(BTNode));
+            btn-&gt;btnode=p;
+            btn-&gt;isFirst=true;
+            s.push(btn);
+            p=p-&gt;lchild;
+        }
+        if(!s.empty())
+        {
+            temp=s.top();
+            s.pop();
+            if(temp-&gt;isFirst==true)     //&#x8868;&#x793A;&#x662F;&#x7B2C;&#x4E00;&#x6B21;&#x51FA;&#x73B0;&#x5728;&#x6808;&#x9876; 
+             {
+                temp-&gt;isFirst=false;
+                s.push(temp);
+                p=temp-&gt;btnode-&gt;rchild;    
+            }
+            else                        //&#x7B2C;&#x4E8C;&#x6B21;&#x51FA;&#x73B0;&#x5728;&#x6808;&#x9876; 
+             {
+                cout&lt;&lt;temp-&gt;btnode-&gt;data&lt;&lt;&quot; &quot;;
+                p=NULL;
+            }
+        }
+    }    
+}
+</code></pre><pre><code class="lang-javascript">//
+//  CTree.cpp
+//  Lesson3
+//
+//  Created by ShenJun on 2017/1/19.
+//  Copyright &#xA9; 2017&#x5E74; ShenJun. All rights reserved.
+//
+
+
+    typedef struct TreeNode
+    {
+        TreeNode() : lch(0), rch(0), data(&apos;\0&apos;){}
+        TreeNode* lch;
+        TreeNode* rch;
+        char data;
+    } *Node;
+
+
+
+#include &quot;CTree.hpp&quot;
+
+
+void CreatTree(Node&amp; T)  // &#x4ECE;&#x6839;&#x8282;&#x70B9;&#x5F00;&#x59CB;&#x5B9E;&#x73B0;
+{
+    T = new TreeNode();
+
+    std::cout &lt;&lt; &quot;Enter the Number :&quot; ;
+    std::cin &gt;&gt; T-&gt;data;
+
+    if(T-&gt;data == &apos;#&apos;)
+    {
+        delete T;
+        T = 0;
+    }
+    else
+    {
+        CreatTree(T-&gt;lch);
+        CreatTree(T-&gt;rch);
+    }
+}
+
+// &#x9012;&#x5F52;&#x524D;&#x5E8F;&#x904D;&#x5386;
+void preOrder(Node&amp; T)
+{
+    if(T != NULL)
+    {
+        printf(&quot;%c&quot;, T-&gt;data);
+        preOrder(T-&gt;lch);
+        preOrder(T-&gt;rch);
+    }
+}
+
+void inOrder(Node&amp; T)
+{
+    if(T != NULL)
+    {
+        inOrder(T-&gt;lch);
+        printf(&quot;%c&quot;, T-&gt;data);
+        inOrder(T-&gt;rch);
+    }
+}
+
+void postOrder(Node&amp; T)
+{
+    if(T != NULL)
+    {
+        postOrder(T-&gt;lch);
+        postOrder(T-&gt;rch);
+        printf(&quot;%c&quot;, T-&gt;data);
+    }
+}
+
+
+
+void pre_order(Node&amp; T)
+{
+    std::stack&lt;Node&gt;* m_pStack = new std::stack&lt;Node&gt;();
+    while (T != NULL || !m_pStack-&gt;empty()) {
+        if(T != NULL)
+        {
+            printf(&quot;%c&quot;, T-&gt;data);
+            m_pStack-&gt;push(T-&gt;rch);
+            T = T-&gt;lch;
+        }
+        else
+        {
+            T = m_pStack-&gt;top();
+            m_pStack-&gt;pop();
+        }
+    }
+    delete m_pStack;
+    m_pStack = NULL;
+}
+
+// &#x975E;&#x9012;&#x5F52;&#x4E2D;&#x5E8F;&#x904D;&#x5386;
+void in_order(Node&amp; T)
+{
+    std::stack&lt;Node&gt;* m_pStack = new std::stack&lt;Node&gt;();
+    while (T != NULL || !m_pStack-&gt;empty()) {
+        if(T != NULL)
+        {
+            m_pStack-&gt;push(T);
+            T = T-&gt;lch;
+        }
+        else
+        {
+            T = m_pStack-&gt;top();
+            printf(&quot;%c&quot;, T-&gt;data);
+            m_pStack-&gt;pop();
+            T = T-&gt;rch;
+        }
+    }
+    delete m_pStack;
+    m_pStack = NULL;
+}
+
+// &#x5220;&#x9664;
+void ClearTree(Node&amp; T)
+{
+    ClearTree(T-&gt;lch);
+    ClearTree(T-&gt;rch);
+    delete T;
+}
+
+void TreeMain()
+{
+
+    TreeNode *pRoot = new TreeNode();
+    CreatTree(pRoot);
+//  preOrder(pRoot);
+//  pre_order(pRoot);
+    in_order(pRoot);
+}
+</code></pre>
+
                                 
                                 </section>
                             
@@ -7724,7 +7939,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第16章 string 类和标准模版库","level":"1.17","depth":1,"next":{"title":"16.1 string 类","level":"1.17.1","depth":2,"path":"第16章 string 类和标准模版库/161-string-类.md","ref":"第16章 string 类和标准模版库/161-string-类.md","articles":[{"title":"16.1.1 构造字符串","level":"1.17.1.1","depth":3,"path":"第16章 string 类和标准模版库/1611-构造字符串.md","ref":"第16章 string 类和标准模版库/1611-构造字符串.md","articles":[]},{"title":"16.1.2 string 类输入","level":"1.17.1.2","depth":3,"path":"第16章 string 类和标准模版库/1612-string-类输入.md","ref":"第16章 string 类和标准模版库/1612-string-类输入.md","articles":[]},{"title":"16.1.3 使用字符串","level":"1.17.1.3","depth":3,"path":"第16章 string 类和标准模版库/1613-使用字符串.md","ref":"第16章 string 类和标准模版库/1613-使用字符串.md","articles":[]},{"title":"16.1.4 string 还提供了哪些功能","level":"1.17.1.4","depth":3,"path":"第16章 string 类和标准模版库/1614-string-还提供了哪些功能.md","ref":"第16章 string 类和标准模版库/1614-string-还提供了哪些功能.md","articles":[]},{"title":"16.1.5 字符串种类","level":"1.17.1.5","depth":3,"path":"第16章 string 类和标准模版库/1615-字符串种类.md","ref":"第16章 string 类和标准模版库/1615-字符串种类.md","articles":[]}]},"previous":{"title":"15.8 编程练习","level":"1.16.8","depth":2,"ref":"","articles":[]},"dir":"neutral"},"config":{"plugins":["-search","livereload"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"fontsettings":{"theme":"white","family":"sans","size":2},"livereload":{},"highlight":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","dirction":"沈军","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"C++ Primer Plus","language":"zh-cn","gitbook":">=2.0.0","description":"天道酬勤"},"file":{"path":"第16章 string 类和标准模版库/第16章-string-类和标准模版库.md","mtime":"2017-01-15T16:59:21.000Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-01-17T16:39:02.828Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"第16章 string 类和标准模版库","level":"1.17","depth":1,"next":{"title":"16.1 string 类","level":"1.17.1","depth":2,"path":"第16章 string 类和标准模版库/161-string-类.md","ref":"第16章 string 类和标准模版库/161-string-类.md","articles":[{"title":"16.1.1 构造字符串","level":"1.17.1.1","depth":3,"path":"第16章 string 类和标准模版库/1611-构造字符串.md","ref":"第16章 string 类和标准模版库/1611-构造字符串.md","articles":[]},{"title":"16.1.2 string 类输入","level":"1.17.1.2","depth":3,"path":"第16章 string 类和标准模版库/1612-string-类输入.md","ref":"第16章 string 类和标准模版库/1612-string-类输入.md","articles":[]},{"title":"16.1.3 使用字符串","level":"1.17.1.3","depth":3,"path":"第16章 string 类和标准模版库/1613-使用字符串.md","ref":"第16章 string 类和标准模版库/1613-使用字符串.md","articles":[]},{"title":"16.1.4 string 还提供了哪些功能","level":"1.17.1.4","depth":3,"path":"第16章 string 类和标准模版库/1614-string-还提供了哪些功能.md","ref":"第16章 string 类和标准模版库/1614-string-还提供了哪些功能.md","articles":[]},{"title":"16.1.5 字符串种类","level":"1.17.1.5","depth":3,"path":"第16章 string 类和标准模版库/1615-字符串种类.md","ref":"第16章 string 类和标准模版库/1615-字符串种类.md","articles":[]}]},"previous":{"title":"15.8 编程练习","level":"1.16.8","depth":2,"ref":"","articles":[]},"dir":"ltr"},"config":{"plugins":["-search","livereload"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"fontsettings":{"theme":"white","family":"sans","size":2},"livereload":{},"highlight":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","dirction":"沈军","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"C++ Primer Plus","language":"zh-cn","gitbook":">=2.0.0","description":"天道酬勤"},"file":{"path":"第16章 string 类和标准模版库/第16章-string-类和标准模版库.md","mtime":"2017-01-19T00:44:17.000Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-01-19T00:44:51.065Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
